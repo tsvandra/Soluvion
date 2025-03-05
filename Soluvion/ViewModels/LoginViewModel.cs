@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Soluvion.Models;
+using Microsoft.Maui.Controls;
 
 namespace Soluvion.ViewModels
 {
@@ -26,6 +28,27 @@ namespace Soluvion.ViewModels
             {
                 _password = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public ICommand LoginCommand { get; }
+
+        public LoginViewModel()
+        {
+            LoginCommand = new Command(OnLogin);
+        }
+
+        private async void OnLogin()
+        {
+            // Add your login logic here
+            if (Username == "test" && Password == "password")
+            {
+                await Application.Current.MainPage.DisplayAlert("Login", "Login successful!", "OK");
+                // Navigate to the next page or perform other actions
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Login", "Invalid username or password", "OK");
             }
         }
 
