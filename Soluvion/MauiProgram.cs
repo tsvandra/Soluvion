@@ -30,7 +30,7 @@ public static class MauiProgram
 
         // Regisztráljuk a nézeteket
         builder.Services.AddTransient<LoginPage>();
-        builder.Services.AddTransient<HomePage>();
+        //builder.Services.AddTransient<HomePage>();
 #if DEBUG
 builder.Logging.AddDebug();
 #endif

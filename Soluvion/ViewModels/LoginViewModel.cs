@@ -52,8 +52,6 @@ namespace Soluvion.ViewModels
                 {
                     var user = await _databaseService.GetUserAsync(Username);
 
-                    await Application.Current.MainPage.DisplayAlert("Login", "Login successful!", "OK");
-
                     // Navigálás a megfelelõ oldalra a szerepkörtõl függõen
                     switch (user.Role)
                     {
@@ -79,21 +77,6 @@ namespace Soluvion.ViewModels
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
-            }
-        }
-
-        private async void OnLogin()
-        {
-            // Add your login logic here
-            if (Username == "test" && Password == "password")
-            {
-                await Application.Current.MainPage.DisplayAlert("Login", "Login successful!", "OK");
-                await Application.Current.MainPage.Navigation.PushAsync(new HomePage());
-                // Navigate to the next page or perform other actions
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Login", "Invalid username or password", "OK");
             }
         }
 
