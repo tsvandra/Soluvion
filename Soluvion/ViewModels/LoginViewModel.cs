@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Soluvion.Models;
 using Microsoft.Maui.Controls;
+using Soluvion.Views;
+using Soluvion.Services;
 
 namespace Soluvion.ViewModels
 {
@@ -10,6 +12,7 @@ namespace Soluvion.ViewModels
     {
         private string _username;
         private string _password;
+        private readonly DatabaseService _databaseService;
 
         public string Username
         {
@@ -35,7 +38,48 @@ namespace Soluvion.ViewModels
 
         public LoginViewModel()
         {
-            LoginCommand = new Command(OnLogin);
+            _databaseService = new DatabaseService();
+            LoginCommand = new Command(async () => await OnLoginAsync());
+        }
+
+        private async Task OnLoginAsync()
+        {
+            try
+            {
+                bool isValid = await _databaseService.ValidateUserAsync(Username, Password);
+
+                if (isValid)
+                {
+                    var user = await _databaseService.GetUserAsync(Username);
+
+                    await Application.Current.MainPage.DisplayAlert("Login", "Login successful!", "OK");
+
+                    // Navigálás a megfelelõ oldalra a szerepkörtõl függõen
+                    switch (user.Role)
+                    {
+                        case "Admin":
+                            await Application.Current.MainPage.Navigation.PushAsync(new Views.Admin.AdminDashboardPage(user));
+                            break;
+                        case "SalonEmployee":
+                            await Application.Current.MainPage.Navigation.PushAsync(new Views.SalonEmployee.SalonDashboardPage(user));
+                            break;
+                        case "Customer":
+                            await Application.Current.MainPage.Navigation.PushAsync(new Views.Customer.CustomerDashboardPage(user));
+                            break;
+                        default:
+                            await Application.Current.MainPage.DisplayAlert("Access Denied", "Invalid username or password", "OK");
+                            break;
+                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Login", "Invalid username or password", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Login failed: {ex.Message}", "OK");
+            }
         }
 
         private async void OnLogin()
@@ -44,6 +88,7 @@ namespace Soluvion.ViewModels
             if (Username == "test" && Password == "password")
             {
                 await Application.Current.MainPage.DisplayAlert("Login", "Login successful!", "OK");
+                await Application.Current.MainPage.Navigation.PushAsync(new HomePage());
                 // Navigate to the next page or perform other actions
             }
             else
