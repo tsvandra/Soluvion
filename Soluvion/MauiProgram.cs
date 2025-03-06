@@ -7,7 +7,20 @@ namespace Soluvion;
 
 public static class MauiProgram
 {
-    public static string ConnectionString { get; } = "Server=Nitro;Database=Soluvion;User Id=tsvandra;Password=.tomAsk08.;TrustServerCertificate=True";
+    public static string ConnectionString
+    {
+        get
+        {
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                return "Server=10.0.2.2,1433;Database=Soluvion;User Id=tsvandra;Password=.tomAsk08.;TrustServerCertificate=True";
+            }
+            else
+            {
+                return "Server=Nitro;Database=Soluvion;User Id=tsvandra;Password=.tomAsk08.;TrustServerCertificate=True";
+            }
+        }
+    }
 
     public static MauiApp CreateMauiApp()
     {
