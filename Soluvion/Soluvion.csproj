@@ -76,7 +76,6 @@
 	  <Folder Include="ViewModels\Common\" />
 	  <Folder Include="ViewModels\Customer\" />
 	  <Folder Include="ViewModels\Admin\" />
-	  <Folder Include="ViewModels\SalonEmployee\" />
 	  <Folder Include="Views\Common\" />
 	</ItemGroup>
 

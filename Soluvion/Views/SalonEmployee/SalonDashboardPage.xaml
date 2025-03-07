@@ -1,13 +1,139 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Soluvion.ViewModels.SalonEmployee"
+             xmlns:models="clr-namespace:Soluvion.Models"
              x:Class="Soluvion.Views.SalonEmployee.SalonDashboardPage"
              Title="Salon Dashboard">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to Salon Employee Dashboard"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Label x:Name="UserNameLabel" />
-    </VerticalStackLayout>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="CardStyle" TargetType="Frame">
+                <Setter Property="Margin" Value="10,5"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="BorderColor" Value="#e0e0e0"/>
+                <Setter Property="HasShadow" Value="True"/>
+            </Style>
+            <Style x:Key="HeaderStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0,0,0,5"/>
+            </Style>
+            <Style x:Key="SubHeaderStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+            <Style x:Key="NormalTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style x:Key="ActionButtonStyle" TargetType="Button">
+                <Setter Property="Margin" Value="0,5,5,0"/>
+                <Setter Property="Padding" Value="10,5"/>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header Section -->
+        <StackLayout Grid.Row="0" Padding="15">
+            <Label x:Name="UserNameLabel" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Kezeld a foglalásokat és időpontokat" Style="{StaticResource NormalTextStyle}"/>
+        </StackLayout>
+
+        <!-- Content Section -->
+        <RefreshView Grid.Row="1" Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsLoading}">
+            <ScrollView>
+                <StackLayout Padding="10" Spacing="10">
+                    <!-- Error Message Display -->
+                    <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="{Binding HasErrorMessage}"
+                           Margin="10" FontSize="14" HorizontalOptions="Center"/>
+
+                    <!-- Appointments Collection -->
+                    <CollectionView ItemsSource="{Binding Appointments}" 
+                                    SelectionMode="Single" 
+                                    SelectedItem="{Binding SelectedAppointment}">
+                        <CollectionView.EmptyView>
+                            <StackLayout Padding="20">
+                                <Label Text="Nincs megjeleníthető foglalás" 
+                                       HorizontalOptions="Center" 
+                                       VerticalOptions="Center"
+                                       FontSize="18"
+                                       TextColor="Gray"/>
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Appointment">
+                                <Frame Style="{StaticResource CardStyle}">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                        <!-- Status indicator -->
+                                        <BoxView Grid.RowSpan="4" Grid.Column="1" 
+                                                 WidthRequest="5" 
+                                                 BackgroundColor="{Binding StatusColor}" 
+                                                 HorizontalOptions="End"/>
+
+                                        <!-- Customer and date info -->
+                                        <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                                            <Label Text="{Binding Customer.Name}" Style="{StaticResource SubHeaderStyle}"/>
+                                            <Label Text=" - " Style="{StaticResource NormalTextStyle}"/>
+                                            <Label Text="{Binding AppointmentDate, StringFormat='{0:yyyy.MM.dd. HH:mm}'}" 
+                                                   Style="{StaticResource NormalTextStyle}"/>
+                                        </StackLayout>
+
+                                        <!-- Service info -->
+                                        <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                                            <Label Text="{Binding Service.Name}" Style="{StaticResource NormalTextStyle}"/>
+                                            <Label Text=" - " Style="{StaticResource NormalTextStyle}"/>
+                                            <Label Text="{Binding Service.Duration, StringFormat='{0} perc'}" 
+                                                   Style="{StaticResource NormalTextStyle}"/>
+                                            <Label Text=" - " Style="{StaticResource NormalTextStyle}"/>
+                                            <Label Text="{Binding Service.Price, StringFormat='{0:C0}'}" 
+                                                   Style="{StaticResource NormalTextStyle}"/>
+                                        </StackLayout>
+
+                                        <!-- Status info -->
+                                        <Label Grid.Row="2" Grid.Column="0" 
+                                               Text="{Binding Status.StatusName}" 
+                                               TextColor="{Binding StatusColor}"/>
+
+                                        <!-- Action buttons -->
+                                        <StackLayout Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="0,10,0,0">
+                                            <Button Text="Megerősít" 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SalonDashboardViewModel}}, Path=ConfirmAppointmentCommand}" 
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource ActionButtonStyle}"
+                                                    BackgroundColor="Green"
+                                                    IsVisible="{Binding Status.StatusName, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Pending'}"/>
+
+                                            <Button Text="Teljesítve" 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SalonDashboardViewModel}}, Path=CompleteAppointmentCommand}" 
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource ActionButtonStyle}"
+                                                    BackgroundColor="Blue"
+                                                    IsVisible="{Binding Status.StatusName, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Confirmed'}"/>
+
+                                            <Button Text="Lemondás" 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SalonDashboardViewModel}}, Path=CancelAppointmentCommand}" 
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource ActionButtonStyle}"
+                                                    BackgroundColor="Red"
+                                                    IsVisible="{Binding Status.StatusName, Converter={StaticResource StringNotEqualsConverter}, ConverterParameter='Cancelled,Completed,NoShow'}"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
+
+        <!-- Footer with actions -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" Padding="10" BackgroundColor="#f5f5f5">
+            <Button Grid.Column="0" Text="Frissítés" Command="{Binding RefreshCommand}" Margin="5" BackgroundColor="#2196F3"/>
+            <!-- Itt további gombokat adhatunk hozzá később -->
+        </Grid>
+    </Grid>
 </ContentPage>
