@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Soluvion.ViewModels"
+             x:Class="Soluvion.Views.RegisterPage"
+             Title="Regisztráció">
+
+    <ContentPage.BindingContext>
+        <vm:RegisterViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Regisztráció" FontSize="24" HorizontalOptions="Center" Margin="0,0,0,20"/>
+
+            <Label Text="Felhasználónév" />
+            <Entry Text="{Binding Username}" Placeholder="Add meg a felhasználóneved"/>
+
+            <Label Text="Jelszó" />
+            <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Add meg a jelszavad"/>
+
+            <Label Text="Jelszó megerősítése" />
+            <Entry Text="{Binding ConfirmPassword}" IsPassword="True" Placeholder="Erősítsd meg a jelszavad"/>
+
+            <Label Text="Teljes név" />
+            <Entry Text="{Binding Name}" Placeholder="Add meg a teljes neved"/>
+
+            <Label Text="Felhasználói szerepkör" />
+            <Picker ItemsSource="{Binding Roles}" 
+                    SelectedItem="{Binding SelectedRole}" 
+                    ItemDisplayBinding="{Binding Description}"
+                    Title="Válassz szerepkört" />
+
+            <Button Text="Regisztráció" Command="{Binding RegisterCommand}" Margin="0,20,0,0" />
+
+            <Button Text="Vissza a bejelentkezéshez" Command="{Binding BackToLoginCommand}" BackgroundColor="Transparent" TextColor="Blue" />
+
+            <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="{Binding HasErrorMessage}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+

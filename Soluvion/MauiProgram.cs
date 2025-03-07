@@ -33,19 +33,17 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Regisztráljuk a szolgáltatásokat
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddTransient<LoginViewModel>();
-        //builder.Services.AddTransient<HomeViewModel>();
         builder.Services.AddTransient<Views.Admin.AdminDashboardPage>();
         builder.Services.AddTransient<Views.SalonEmployee.SalonDashboardPage>();
         builder.Services.AddTransient<Views.Customer.CustomerDashboardPage>();
-
-        // Regisztráljuk a nézeteket
         builder.Services.AddTransient<LoginPage>();
-        //builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<RegisterPage>();
+        builder.Services.AddTransient<RegisterViewModel>();
+
 #if DEBUG
-builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
         return builder.Build();
     }

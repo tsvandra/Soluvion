@@ -35,11 +35,13 @@ namespace Soluvion.ViewModels
         }
 
         public ICommand LoginCommand { get; }
+        public ICommand NavigateToRegisterCommand { get; }
 
         public LoginViewModel()
         {
             _databaseService = new DatabaseService();
             LoginCommand = new Command(async () => await OnLoginAsync());
+            NavigateToRegisterCommand = new Command(OnNavigateToRegister);
         }
 
         private async Task OnLoginAsync()
@@ -85,6 +87,11 @@ namespace Soluvion.ViewModels
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async void OnNavigateToRegister()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
         }
     }
 }

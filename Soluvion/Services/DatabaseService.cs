@@ -130,5 +130,78 @@ namespace Soluvion.Services
 
             return users;
         }
+
+        // Ellenőrzi, hogy létezik-e már felhasználó az adott felhasználónévvel
+        public async Task<bool> CheckUserExistsAsync(string username)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = "SELECT COUNT(1) FROM Users WHERE Username = @Username";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    int count = (int)await command.ExecuteScalarAsync();
+                    return count > 0;
+                }
+            }
+        }
+
+        // Új felhasználó létrehozása
+        public async Task<bool> CreateUserAsync(User user)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = @"INSERT INTO Users (Username, Password, Name, RoleId) 
+                        VALUES (@Username, @Password, @Name, @RoleId)";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", user.Username);
+                    command.Parameters.AddWithValue("@Password", user.Password);
+                    command.Parameters.AddWithValue("@Name", user.Name);
+                    command.Parameters.AddWithValue("@RoleId", user.RoleId);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+        // Szerepkörök lekérdezése
+        public async Task<List<UserRole>> GetAllUserRolesAsync()
+        {
+            List<UserRole> roles = new List<UserRole>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = "SELECT Id, RoleName, Description FROM UserRoles";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            roles.Add(new UserRole
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                RoleName = reader["RoleName"].ToString(),
+                                Description = reader["Description"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return roles;
+        }
     }
 }
