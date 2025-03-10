@@ -74,7 +74,6 @@
 	  <Folder Include="Services\Authentication\" />
 	  <Folder Include="Services\Common\" />
 	  <Folder Include="ViewModels\Common\" />
-	  <Folder Include="ViewModels\Customer\" />
 	  <Folder Include="ViewModels\Admin\" />
 	  <Folder Include="Views\Common\" />
 	</ItemGroup>
@@ -89,6 +88,9 @@
 	  <Compile Update="Views\LoginPage.xaml.cs">
 	    <DependentUpon>LoginPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\NewAppointmentPage.xaml.cs">
+	    <DependentUpon>NewAppointmentPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SalonEmployee\SalonDashboardPage.xaml.cs">
 	    <DependentUpon>SalonDashboardPage.xaml</DependentUpon>
 	  </Compile>
@@ -102,6 +104,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\NewAppointmentPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterPage.xaml">

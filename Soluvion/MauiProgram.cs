@@ -2,6 +2,7 @@
 using Soluvion.Services;
 using Soluvion.ViewModels;
 using Soluvion.Views;
+using Soluvion.ViewModels.Customer;
 
 namespace Soluvion;
 
@@ -38,6 +39,7 @@ public static class MauiProgram
         builder.Services.AddTransient<Views.Admin.AdminDashboardPage>();
         builder.Services.AddTransient<Views.SalonEmployee.SalonDashboardPage>();
         builder.Services.AddTransient<Views.Customer.CustomerDashboardPage>();
+        builder.Services.AddTransient<CustomerDashboardViewModel>();
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<RegisterPage>();
         builder.Services.AddTransient<RegisterViewModel>();

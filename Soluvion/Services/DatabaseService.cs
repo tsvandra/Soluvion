@@ -388,6 +388,74 @@ namespace Soluvion.Services
 
             return statuses;
         }
+
+        public async Task<bool> CreateAppointmentAsync(Appointment appointment)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = @"INSERT INTO Appointments (CustomerId, ServiceId, EmployeeId, AppointmentDate, StatusId, Notes, CreatedAt) 
+                        VALUES (@CustomerId, @ServiceId, @EmployeeId, @AppointmentDate, @StatusId, @Notes, @CreatedAt)";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CustomerId", appointment.CustomerId);
+                    command.Parameters.AddWithValue("@ServiceId", appointment.ServiceId);
+                    command.Parameters.AddWithValue("@EmployeeId", (object)appointment.EmployeeId ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@AppointmentDate", appointment.AppointmentDate);
+                    command.Parameters.AddWithValue("@StatusId", appointment.StatusId);
+                    command.Parameters.AddWithValue("@Notes", (object)appointment.Notes ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@CreatedAt", appointment.CreatedAt);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+        public async Task<List<Service>> GetAllServicesAsync()
+        {
+            List<Service> services = new List<Service>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = "SELECT s.Id, s.Name, s.Description, s.Duration, s.Price, s.SalonId, " +
+                               "sa.Name AS SalonName, sa.Address, sa.Phone, sa.Email " +
+                               "FROM Services s JOIN Salons sa ON s.SalonId = sa.Id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            services.Add(new Service
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = reader["Name"].ToString(),
+                                Description = reader["Description"].ToString(),
+                                Duration = Convert.ToInt32(reader["Duration"]),
+                                Price = Convert.ToDecimal(reader["Price"]),
+                                SalonId = Convert.ToInt32(reader["SalonId"]),
+                                Salon = new Salon
+                                {
+                                    Id = Convert.ToInt32(reader["SalonId"]),
+                                    Name = reader["SalonName"].ToString(),
+                                    Address = reader["Address"].ToString(),
+                                    Phone = reader["Phone"].ToString(),
+                                    Email = reader["Email"].ToString()
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            return services;
+        }
     }
 }
 

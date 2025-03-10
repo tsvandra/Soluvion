@@ -1,17 +1,14 @@
 using Soluvion.Models;
+using Soluvion.ViewModels.Customer;
 
-namespace Soluvion.Views.Customer;
-
-public partial class CustomerDashboardPage : ContentPage
+namespace Soluvion.Views.Customer
 {
-    public CustomerDashboardPage()
+    public partial class CustomerDashboardPage : ContentPage
     {
-        InitializeComponent();
-    }
-
-    public CustomerDashboardPage(User user)
-    {
-        InitializeComponent();
-        UserNameLabel.Text = $"Hello, {user.Name}!";
+        public CustomerDashboardPage(User user)
+        {
+            InitializeComponent();
+            BindingContext = new CustomerDashboardViewModel(user);
+        }
     }
 }
