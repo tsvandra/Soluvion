@@ -10,7 +10,7 @@ namespace Soluvion.ViewModels
 {
     public class RegisterViewModel : INotifyPropertyChanged
     {
-        private readonly DatabaseService _databaseService;
+        private readonly UserService _userService;
         private string _username;
         private string _password;
         private string _confirmPassword;
@@ -106,7 +106,7 @@ namespace Soluvion.ViewModels
 
         public RegisterViewModel()
         {
-            _databaseService = new DatabaseService();
+            _userService = new UserService(MauiProgram.ConnectionString);
             RegisterCommand = new Command(async () => await OnRegisterAsync());
             BackToLoginCommand = new Command(OnBackToLogin);
 
@@ -118,7 +118,7 @@ namespace Soluvion.ViewModels
         {
             try
             {
-                var roles = await _databaseService.GetAllUserRolesAsync();
+                var roles = await _userService.GetAllUserRolesAsync();
                 var availableRoles = roles.Where(r => r.RoleName != "Admin").ToList();
                 Roles = new ObservableCollection<UserRole>(availableRoles);
 
@@ -167,7 +167,7 @@ namespace Soluvion.ViewModels
             try
             {
                 // Ellenőrizzük, hogy létezik-e már a felhasználó
-                bool userExists = await _databaseService.CheckUserExistsAsync(Username);
+                bool userExists = await _userService.CheckUserExistsAsync(Username);
                 if (userExists)
                 {
                     ErrorMessage = "Ez a felhasználónév már foglalt!";
@@ -184,7 +184,7 @@ namespace Soluvion.ViewModels
                     Role = SelectedRole
                 };
 
-                bool success = await _databaseService.CreateUserAsync(newUser);
+                bool success = await _userService.CreateUserAsync(newUser);
 
                 if (success)
                 {
