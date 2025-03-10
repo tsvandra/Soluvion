@@ -12,7 +12,7 @@ namespace Soluvion.ViewModels
     {
         private string _username;
         private string _password;
-        private readonly DatabaseService _databaseService;
+        private readonly UserService _userService;
 
         public string Username
         {
@@ -39,7 +39,7 @@ namespace Soluvion.ViewModels
 
         public LoginViewModel()
         {
-            _databaseService = new DatabaseService();
+            _userService = new UserService(MauiProgram.ConnectionString);
             LoginCommand = new Command(async () => await OnLoginAsync());
             NavigateToRegisterCommand = new Command(OnNavigateToRegister);
         }
@@ -48,11 +48,11 @@ namespace Soluvion.ViewModels
         {
             try
             {
-                bool isValid = await _databaseService.ValidateUserAsync(Username, Password);
+                bool isValid = await _userService.ValidateUserAsync(Username, Password);
 
                 if (isValid)
                 {
-                    var user = await _databaseService.GetUserAsync(Username);
+                    var user = await _userService.GetUserAsync(Username);
 
                     // Navigálás a megfelelõ oldalra a szerepkörtõl függõen
                     switch (user.Role)

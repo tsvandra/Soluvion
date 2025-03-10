@@ -51,8 +51,11 @@ public static class MauiProgram
         builder.Services.AddTransient<Views.SalonEmployee.SalonDashboardPage>();
 
         builder.Services.AddTransient<Views.Admin.AdminDashboardPage>();
-        
-        
+
+        builder.Services.AddSingleton<UserService>(sp => new UserService(MauiProgram.ConnectionString));
+        builder.Services.AddSingleton<AppointmentService>(sp => new AppointmentService(MauiProgram.ConnectionString));
+
+
 
 
 #if DEBUG

@@ -1,17 +1,16 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Soluvion.Models;
 using Soluvion.Services;
 using Soluvion.Views;
-using Microsoft.Maui.Controls;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace Soluvion.ViewModels.SalonEmployee
 {
     public class SalonDashboardViewModel : INotifyPropertyChanged
     {
-        private readonly DatabaseService _databaseService;
+        private readonly AppointmentService _appointmentService;
         private readonly User _currentUser;
         private ObservableCollection<Appointment> _appointments;
         private bool _isLoading;
@@ -80,7 +79,7 @@ namespace Soluvion.ViewModels.SalonEmployee
         public SalonDashboardViewModel(User currentUser)
         {
             _currentUser = currentUser;
-            _databaseService = new DatabaseService();
+            _appointmentService = new AppointmentService(MauiProgram.ConnectionString);
 
             Appointments = new ObservableCollection<Appointment>();
 
@@ -101,7 +100,7 @@ namespace Soluvion.ViewModels.SalonEmployee
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                var appointments = await _databaseService.GetAppointmentsForEmployeeAsync(_currentUser.Id);
+                var appointments = await _appointmentService.GetAppointmentsForEmployeeAsync(_currentUser.Id);
 
                 Appointments.Clear();
                 foreach (var appointment in appointments)
@@ -128,7 +127,7 @@ namespace Soluvion.ViewModels.SalonEmployee
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                bool success = await _databaseService.UpdateAppointmentStatusAsync(appointment.Id, statusId, _currentUser.Id);
+                bool success = await _appointmentService.UpdateAppointmentStatusAsync(appointment.Id, statusId, _currentUser.Id);
 
                 if (success)
                 {

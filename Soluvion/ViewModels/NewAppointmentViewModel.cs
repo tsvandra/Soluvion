@@ -9,7 +9,8 @@ namespace Soluvion.ViewModels
 {
     public class NewAppointmentViewModel : INotifyPropertyChanged
     {
-        private readonly DatabaseService _databaseService;
+        private readonly AppointmentService _appointmentService;
+        private readonly UserService _userService;
         private User _selectedCustomer;
         private Service _selectedService;
         private DateTime _appointmentDate;
@@ -115,7 +116,8 @@ namespace Soluvion.ViewModels
 
         public NewAppointmentViewModel()
         {
-            _databaseService = new DatabaseService();
+            _appointmentService = new AppointmentService(MauiProgram.ConnectionString);
+            _userService = new UserService(MauiProgram.ConnectionString);
             CreateAppointmentCommand = new Command(async () => await OnCreateAppointmentAsync());
 
             // Alapértelmezett értékek
@@ -131,7 +133,7 @@ namespace Soluvion.ViewModels
         {
             try
             {
-                var services = await _databaseService.GetAllServicesAsync();
+                var services = await _appointmentService.GetAllServicesAsync();
                 Services = new ObservableCollection<Service>(services);
             }
             catch (Exception ex)
@@ -144,7 +146,7 @@ namespace Soluvion.ViewModels
         {
             try
             {
-                var customers = await _databaseService.GetAllUsersAsync();
+                var customers = await _userService.GetAllUsersAsync();
                 Customers = new ObservableCollection<User>(customers);
             }
             catch (Exception ex)
@@ -180,7 +182,7 @@ namespace Soluvion.ViewModels
                     CreatedAt = DateTime.Now
                 };
 
-                bool success = await _databaseService.CreateAppointmentAsync(newAppointment);
+                bool success = await _appointmentService.CreateAppointmentAsync(newAppointment);
 
                 if (success)
                 {

@@ -11,7 +11,7 @@ namespace Soluvion.ViewModels.Customer
 {
     public class CustomerDashboardViewModel : INotifyPropertyChanged
     {
-        private readonly DatabaseService _databaseService;
+        private readonly AppointmentService _appointmentService;
         private readonly User _currentUser;
         private ObservableCollection<Appointment> _appointments;
         private bool _isLoading;
@@ -20,6 +20,7 @@ namespace Soluvion.ViewModels.Customer
 
         public CustomerDashboardViewModel()
         {
+
         }
 
         public ObservableCollection<Appointment> Appointments
@@ -69,7 +70,7 @@ namespace Soluvion.ViewModels.Customer
         public CustomerDashboardViewModel(User currentUser)
         {
             _currentUser = currentUser;
-            _databaseService = new DatabaseService();
+            _appointmentService = new AppointmentService(MauiProgram.ConnectionString);
             Appointments = new ObservableCollection<Appointment>();
 
             NavigateToNewAppointmentCommand = new Command(OnNavigateToNewAppointment);
@@ -91,7 +92,7 @@ namespace Soluvion.ViewModels.Customer
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                var appointments = await _databaseService.GetAppointmentsForCustomerAsync(_currentUser.Id);
+                var appointments = await _appointmentService.GetAppointmentsForCustomerAsync(_currentUser.Id);
 
                 Appointments.Clear();
                 foreach (var appointment in appointments)
