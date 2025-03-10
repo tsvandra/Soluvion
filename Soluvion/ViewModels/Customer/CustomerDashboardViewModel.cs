@@ -6,21 +6,39 @@ using Soluvion.Views;
 using Microsoft.Maui.Controls;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Soluvion.ViewModels.Customer
 {
     public class CustomerDashboardViewModel : INotifyPropertyChanged
     {
         private readonly AppointmentService _appointmentService;
-        private readonly User _currentUser;
+        private User _currentUser;
         private ObservableCollection<Appointment> _appointments;
         private bool _isLoading;
         private string _errorMessage;
         private bool _hasErrorMessage;
 
-        public CustomerDashboardViewModel()
+        public CustomerDashboardViewModel(AppointmentService appointmentService)
         {
+            _appointmentService = appointmentService;
+            Appointments = new ObservableCollection<Appointment>();
 
+            NavigateToNewAppointmentCommand = new Command(async () => await OnNavigateToNewAppointmentAsync());
+            RefreshCommand = new Command(async () => await LoadAppointmentsAsync());
+        }
+
+        public void SetCurrentUser(User user)
+        {
+            _currentUser = user;
+        }
+
+        /// <summary>
+        /// Call this method from the view's OnAppearing method.
+        /// </summary>
+        public async Task InitializeAsync()
+        {
+            await LoadAppointmentsAsync();
         }
 
         public ObservableCollection<Appointment> Appointments
@@ -67,20 +85,7 @@ namespace Soluvion.ViewModels.Customer
         public ICommand NavigateToNewAppointmentCommand { get; }
         public ICommand RefreshCommand { get; }
 
-        public CustomerDashboardViewModel(User currentUser)
-        {
-            _currentUser = currentUser;
-            _appointmentService = new AppointmentService(MauiProgram.ConnectionString);
-            Appointments = new ObservableCollection<Appointment>();
-
-            NavigateToNewAppointmentCommand = new Command(OnNavigateToNewAppointment);
-            RefreshCommand = new Command(async () => await LoadAppointmentsAsync());
-
-            // Betöltjük az időpontokat
-            LoadAppointmentsAsync();
-        }
-
-        private async void OnNavigateToNewAppointment()
+        private async Task OnNavigateToNewAppointmentAsync()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new NewAppointmentPage());
         }

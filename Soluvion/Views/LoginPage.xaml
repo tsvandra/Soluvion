@@ -4,9 +4,9 @@
              xmlns:vm="clr-namespace:Soluvion.ViewModels"
              x:Class="Soluvion.Views.LoginPage">
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <vm:LoginViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
     <StackLayout Padding="10">
         <Entry Placeholder="Username" Text="{Binding Username}" />

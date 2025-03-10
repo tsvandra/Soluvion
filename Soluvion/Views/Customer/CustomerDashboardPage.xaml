@@ -6,10 +6,6 @@
              x:Class="Soluvion.Views.Customer.CustomerDashboardPage"
              Title="Customer Dashboard">
 
-    <ContentPage.BindingContext>
-        <viewmodels:CustomerDashboardViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Header Section -->
         <StackLayout Grid.Row="0" Padding="15">

@@ -5,10 +5,20 @@ namespace Soluvion.Views.Customer
 {
     public partial class CustomerDashboardPage : ContentPage
     {
-        public CustomerDashboardPage(User user)
+        public CustomerDashboardPage(CustomerDashboardViewModel viewModel, User user)
         {
             InitializeComponent();
-            BindingContext = new CustomerDashboardViewModel(user);
+            BindingContext = viewModel;
+            viewModel.SetCurrentUser(user);
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (BindingContext is CustomerDashboardViewModel viewModel)
+            {
+                await viewModel.InitializeAsync();
+            }
         }
     }
 }

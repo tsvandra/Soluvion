@@ -5,6 +5,7 @@ using Soluvion.Models;
 using Microsoft.Maui.Controls;
 using Soluvion.Views;
 using Soluvion.Services;
+using Soluvion.ViewModels.Customer;
 
 namespace Soluvion.ViewModels
 {
@@ -49,9 +50,9 @@ namespace Soluvion.ViewModels
         public ICommand NavigateToRegisterCommand { get; }
         public ICommand DebugLoginCommand { get; }
 
-        public LoginViewModel()
+        public LoginViewModel(UserService userService)
         {
-            _userService = new UserService(MauiProgram.ConnectionString);
+            _userService = userService;
             LoginCommand = new Command(async () => await OnLoginAsync());
             NavigateToRegisterCommand = new Command(OnNavigateToRegister);
             DebugLoginCommand = new Command<string>(async (role) => await OnDebugLoginAsync(role));
@@ -83,7 +84,8 @@ namespace Soluvion.ViewModels
                             await Application.Current.MainPage.Navigation.PushAsync(new Views.SalonEmployee.SalonDashboardPage(user));
                             break;
                         case "Customer":
-                            await Application.Current.MainPage.Navigation.PushAsync(new Views.Customer.CustomerDashboardPage(user));
+                            var customerDashboardViewModel = MauiProgram.CreateMauiApp().Services.GetService<CustomerDashboardViewModel>();
+                            await Application.Current.MainPage.Navigation.PushAsync(new Views.Customer.CustomerDashboardPage(customerDashboardViewModel, user));
                             break;
                         default:
                             await Application.Current.MainPage.DisplayAlert("Access Denied", "Invalid username or password", "OK");

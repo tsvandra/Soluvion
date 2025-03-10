@@ -1,4 +1,5 @@
-﻿using Soluvion.Views;
+﻿using Soluvion.ViewModels;
+using Soluvion.Views;
 
 namespace Soluvion
 {
@@ -7,11 +8,14 @@ namespace Soluvion
         public App()
         {
             InitializeComponent();
+
+            var loginViewModel = MauiProgram.CreateMauiApp().Services.GetService<LoginViewModel>();
+            MainPage = new NavigationPage(new LoginPage(loginViewModel));
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new NavigationPage(new LoginPage()));
-        } 
+        //protected override Window CreateWindow(IActivationState? activationState)
+        //{
+        //    return new Window(new NavigationPage(new LoginPage()));
+        //} 
     }
 }
