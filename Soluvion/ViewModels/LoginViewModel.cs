@@ -13,6 +13,7 @@ namespace Soluvion.ViewModels
         private string _username;
         private string _password;
         private readonly UserService _userService;
+        private bool _isDebugMode;
 
         public string Username
         {
@@ -34,14 +35,32 @@ namespace Soluvion.ViewModels
             }
         }
 
+        public bool IsDebugMode
+        {
+            get => _isDebugMode;
+            set
+            {
+                _isDebugMode = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand LoginCommand { get; }
         public ICommand NavigateToRegisterCommand { get; }
+        public ICommand DebugLoginCommand { get; }
 
         public LoginViewModel()
         {
             _userService = new UserService(MauiProgram.ConnectionString);
             LoginCommand = new Command(async () => await OnLoginAsync());
             NavigateToRegisterCommand = new Command(OnNavigateToRegister);
+            DebugLoginCommand = new Command<string>(async (role) => await OnDebugLoginAsync(role));
+
+#if DEBUG
+            IsDebugMode = true;
+#else
+            IsDebugMode = false;
+#endif
         }
 
         private async Task OnLoginAsync()
@@ -82,16 +101,32 @@ namespace Soluvion.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private async Task OnDebugLoginAsync(string role)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (role == "customer")
+            {
+                Username = "customer";
+                Password = "cust123";
+            }
+            else if (role == "employee")
+            {
+                Username = "employee";
+                Password = "emp123";
+            }
+
+            await OnLoginAsync();
         }
 
         private async void OnNavigateToRegister()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
