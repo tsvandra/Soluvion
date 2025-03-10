@@ -10,13 +10,25 @@ namespace Soluvion.ViewModels
     public class NewAppointmentViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
+        private User _selectedCustomer;
         private Service _selectedService;
         private DateTime _appointmentDate;
         private TimeSpan _appointmentTime;
         private string _notes;
         private string _errorMessage;
         private bool _hasErrorMessage;
+        private ObservableCollection<User> _customers;
         private ObservableCollection<Service> _services;
+
+        public User SelectedCustomer
+        {
+            get => _selectedCustomer;
+            set
+            {
+                _selectedCustomer = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Service SelectedService
         {
@@ -54,6 +66,16 @@ namespace Soluvion.ViewModels
             set
             {
                 _notes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<User> Customers
+        {
+            get => _customers;
+            set
+            {
+                _customers = value;
                 OnPropertyChanged();
             }
         }
@@ -100,8 +122,9 @@ namespace Soluvion.ViewModels
             AppointmentDate = DateTime.Today;
             AppointmentTime = TimeSpan.FromHours(9); // Alapértelmezett időpont: 9:00
 
-            // Szolgáltatások betöltése
+            // Szolgáltatások és ügyfelek betöltése
             LoadServicesAsync();
+            LoadCustomersAsync();
         }
 
         private async void LoadServicesAsync()
@@ -117,9 +140,28 @@ namespace Soluvion.ViewModels
             }
         }
 
+        private async void LoadCustomersAsync()
+        {
+            try
+            {
+                var customers = await _databaseService.GetAllUsersAsync();
+                Customers = new ObservableCollection<User>(customers);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Ügyfelek betöltése sikertelen: {ex.Message}";
+            }
+        }
+
         private async Task OnCreateAppointmentAsync()
         {
             // Validáció
+            if (SelectedCustomer == null)
+            {
+                ErrorMessage = "Ügyfél kiválasztása kötelező!";
+                return;
+            }
+
             if (SelectedService == null)
             {
                 ErrorMessage = "Szolgáltatás kiválasztása kötelező!";
@@ -130,7 +172,7 @@ namespace Soluvion.ViewModels
             {
                 var newAppointment = new Appointment
                 {
-                    CustomerId = 1, // Ezt később dinamikusan kell beállítani a bejelentkezett felhasználó alapján
+                    CustomerId = SelectedCustomer.Id,
                     ServiceId = SelectedService.Id,
                     AppointmentDate = AppointmentDate.Add(AppointmentTime),
                     StatusId = 1, // Alapértelmezett státusz: Pending

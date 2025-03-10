@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Soluvion.Models;
 using Soluvion.Services;
 using Soluvion.Views;
+using Microsoft.Maui.Controls;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Soluvion.ViewModels.SalonEmployee
 {
@@ -12,13 +13,13 @@ namespace Soluvion.ViewModels.SalonEmployee
     {
         private readonly DatabaseService _databaseService;
         private readonly User _currentUser;
-        private ObservableCollection<Models.Appointment> _appointments;
+        private ObservableCollection<Appointment> _appointments;
         private bool _isLoading;
         private string _errorMessage;
         private bool _hasErrorMessage;
-        private Models.Appointment _selectedAppointment;
+        private Appointment _selectedAppointment;
 
-        public ObservableCollection<Models.Appointment> Appointments
+        public ObservableCollection<Appointment> Appointments
         {
             get => _appointments;
             set
@@ -59,7 +60,7 @@ namespace Soluvion.ViewModels.SalonEmployee
             }
         }
 
-        public Models.Appointment SelectedAppointment
+        public Appointment SelectedAppointment
         {
             get => _selectedAppointment;
             set
@@ -74,18 +75,20 @@ namespace Soluvion.ViewModels.SalonEmployee
         public ICommand ConfirmAppointmentCommand { get; }
         public ICommand CancelAppointmentCommand { get; }
         public ICommand CompleteAppointmentCommand { get; }
+        public ICommand NavigateToNewAppointmentCommand { get; }
 
         public SalonDashboardViewModel(User currentUser)
         {
             _currentUser = currentUser;
             _databaseService = new DatabaseService();
 
-            _appointments = new ObservableCollection<Models.Appointment>();
+            Appointments = new ObservableCollection<Appointment>();
 
             RefreshCommand = new Command(async () => await LoadAppointmentsAsync());
-            ConfirmAppointmentCommand = new Command<Models.Appointment>(async (appointment) => await UpdateAppointmentStatus(appointment, 2)); // 2 = Confirmed
-            CancelAppointmentCommand = new Command<Models.Appointment>(async (appointment) => await UpdateAppointmentStatus(appointment, 4)); // 4 = Cancelled
-            CompleteAppointmentCommand = new Command<Models.Appointment>(async (appointment) => await UpdateAppointmentStatus(appointment, 3)); // 3 = Completed
+            ConfirmAppointmentCommand = new Command<Appointment>(async (appointment) => await UpdateAppointmentStatus(appointment, 2)); // 2 = Confirmed
+            CancelAppointmentCommand = new Command<Appointment>(async (appointment) => await UpdateAppointmentStatus(appointment, 4)); // 4 = Cancelled
+            CompleteAppointmentCommand = new Command<Appointment>(async (appointment) => await UpdateAppointmentStatus(appointment, 3)); // 3 = Completed
+            NavigateToNewAppointmentCommand = new Command(OnNavigateToNewAppointment);
 
             // Betöltjük az időpontokat
             LoadAppointmentsAsync();
@@ -100,10 +103,10 @@ namespace Soluvion.ViewModels.SalonEmployee
 
                 var appointments = await _databaseService.GetAppointmentsForEmployeeAsync(_currentUser.Id);
 
-                _appointments.Clear();
+                Appointments.Clear();
                 foreach (var appointment in appointments)
                 {
-                    _appointments.Add(appointment);
+                    Appointments.Add(appointment);
                 }
             }
             catch (Exception ex)
@@ -116,7 +119,7 @@ namespace Soluvion.ViewModels.SalonEmployee
             }
         }
 
-        private async Task UpdateAppointmentStatus(Models.Appointment appointment, int statusId)
+        private async Task UpdateAppointmentStatus(Appointment appointment, int statusId)
         {
             if (appointment == null) return;
 
@@ -157,6 +160,11 @@ namespace Soluvion.ViewModels.SalonEmployee
             {
                 // Például: ShowAppointmentDetails(_selectedAppointment);
             }
+        }
+
+        private async void OnNavigateToNewAppointment()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new NewAppointmentPage());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

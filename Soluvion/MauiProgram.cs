@@ -3,6 +3,7 @@ using Soluvion.Services;
 using Soluvion.ViewModels;
 using Soluvion.Views;
 using Soluvion.ViewModels.Customer;
+using Soluvion.ViewModels.SalonEmployee;
 
 namespace Soluvion;
 
@@ -34,15 +35,25 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddTransient<LoginViewModel>();
-        builder.Services.AddTransient<Views.Admin.AdminDashboardPage>();
-        builder.Services.AddTransient<Views.SalonEmployee.SalonDashboardPage>();
-        builder.Services.AddTransient<Views.Customer.CustomerDashboardPage>();
         builder.Services.AddTransient<CustomerDashboardViewModel>();
+        builder.Services.AddTransient<RegisterViewModel>();
+        builder.Services.AddTransient<NewAppointmentViewModel>();
+        builder.Services.AddTransient<SalonDashboardViewModel>();
+
+        builder.Services.AddSingleton<DatabaseService>();
+
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<RegisterPage>();
-        builder.Services.AddTransient<RegisterViewModel>();
+        builder.Services.AddTransient<NewAppointmentPage>();
+
+        builder.Services.AddTransient<Views.Customer.CustomerDashboardPage>();
+        builder.Services.AddTransient<Views.SalonEmployee.SalonDashboardPage>();
+
+        builder.Services.AddTransient<Views.Admin.AdminDashboardPage>();
+        
+        
+
 
 #if DEBUG
         builder.Logging.AddDebug();

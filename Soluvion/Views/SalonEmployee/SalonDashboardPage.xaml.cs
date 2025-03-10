@@ -14,7 +14,7 @@ namespace Soluvion.Views.SalonEmployee
             _viewModel = new SalonDashboardViewModel(user);
             BindingContext = _viewModel;
 
-            UserNameLabel.Text = $"Üdvözöljük, {user.Name}!";
+            //UserNameLabel.Text = $"Üdvözöljük, {user.Name}!";
         }
     }
 }

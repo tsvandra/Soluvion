@@ -132,7 +132,7 @@
 
         <!-- Footer with actions -->
         <Grid Grid.Row="2" ColumnDefinitions="*,*" Padding="10" BackgroundColor="#f5f5f5">
-            <Button Grid.Column="0" Text="Frissítés" Command="{Binding RefreshCommand}" Margin="5" BackgroundColor="#2196F3"/>
+            <Button Grid.Column="0" Text="Új időpont foglalása" Command="{Binding NavigateToNewAppointmentCommand}" Margin="5" BackgroundColor="#2196F3"/>
             <!-- Itt további gombokat adhatunk hozzá később -->
         </Grid>
     </Grid>
