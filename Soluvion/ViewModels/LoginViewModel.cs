@@ -73,7 +73,7 @@ namespace Soluvion.ViewModels
                 if (isValid)
                 {
                     var user = await _userService.GetUserAsync(Username);
-
+                    Preferences.Set("CurrentUserRoleId", user.RoleId);
                     // Navigálás a megfelelõ oldalra a szerepkörtõl függõen
                     switch (user.Role)
                     {

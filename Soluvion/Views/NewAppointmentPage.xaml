@@ -13,8 +13,9 @@
         <VerticalStackLayout Padding="20" Spacing="15">
             <Label Text="Új időpont foglalása" FontSize="24" HorizontalOptions="Center" Margin="0,0,0,20"/>
 
-            <Label Text="Ügyfél" />
-            <Picker ItemsSource="{Binding Customers}" 
+            <Label Text="Ügyfél" IsVisible="{Binding IsSalonEmployee}"/>
+            <Picker IsVisible="{Binding IsSalonEmployee}"
+                    ItemsSource="{Binding Customers}" 
                     SelectedItem="{Binding SelectedCustomer}" 
                     ItemDisplayBinding="{Binding Name}"
                     Title="Válassz ügyfelet" />

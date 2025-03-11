@@ -18,6 +18,7 @@ namespace Soluvion.ViewModels
         private string _notes;
         private string _errorMessage;
         private bool _hasErrorMessage;
+        private bool _isSalonEmployee;
         private ObservableCollection<User> _customers;
         private ObservableCollection<Service> _services;
 
@@ -112,6 +113,12 @@ namespace Soluvion.ViewModels
             }
         }
 
+        public bool IsSalonEmployee
+        {
+            get => _isSalonEmployee;
+            set { _isSalonEmployee = value; OnPropertyChanged(); }
+        }
+
         public ICommand CreateAppointmentCommand { get; }
 
         public NewAppointmentViewModel()
@@ -127,6 +134,9 @@ namespace Soluvion.ViewModels
             // Szolgáltatások és ügyfelek betöltése
             LoadServicesAsync();
             LoadCustomersAsync();
+
+            int currentUserRoleId = Preferences.Get("CurrentUserRoleId", 0);
+            IsSalonEmployee = currentUserRoleId == 2; // 2 = SalonEmployee
         }
 
         private async void LoadServicesAsync()
@@ -158,7 +168,7 @@ namespace Soluvion.ViewModels
         private async Task OnCreateAppointmentAsync()
         {
             // Validáció
-            if (SelectedCustomer == null)
+            if (IsSalonEmployee && SelectedCustomer == null)
             {
                 ErrorMessage = "Ügyfél kiválasztása kötelező!";
                 return;
@@ -174,7 +184,7 @@ namespace Soluvion.ViewModels
             {
                 var newAppointment = new Appointment
                 {
-                    CustomerId = SelectedCustomer.Id,
+                    CustomerId = SelectedCustomer?.Id ?? 0,
                     ServiceId = SelectedService.Id,
                     AppointmentDate = AppointmentDate.Add(AppointmentTime),
                     StatusId = 1, // Alapértelmezett státusz: Pending
