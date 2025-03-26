@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<sim-project version="13.95" multi-file="no" uid="simpb575a077abab4beb9726857d505f3748">
+<sim-project version="13.96" multi-file="no" uid="simpb575a077abab4beb9726857d505f3748">
   <meta>
     <name>Soluvion</name>
-    <authors>Tamás Švandra</authors>
+    <authors>Tamas Svandra</authors>
     <description />
   </meta>
   <counters models="1">
@@ -61,6 +61,15 @@
         <color>#00000000</color>
         <working-schedule uid="ws-f5aa8b6b4d104d47921aa26b3e84d3db" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
       </person>
+      <person id="">
+        <first-name>Tamas</first-name>
+        <last-name>Svandra</last-name>
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+      </person>
     </persons>
     <teams />
     <sprints />
@@ -78,10 +87,10 @@
       <parameters />
       <types>
         <type id="varchar" name="varchar" />
-        <type id="Decimal" name="Decimal" />
         <type id="nvarchar" name="nvarchar" />
-        <type id="nvarchara" name="nvarchara" />
+        <type id="Decimal" name="Decimal" />
         <type id="int" name="int" />
+        <type id="nvarchara" name="nvarchara" />
         <type id="Date" name="Date" />
         <type id="MsSql.DateTime" name="MsSql.DateTime" />
         <type id=")" name=")" />
@@ -113,7 +122,7 @@
       </meta>
       <abstract-items />
       <sub-models />
-      <diagram type="entity-relationship" id="pd0affd59593a4211ac14346809202b4c_801066806" name="EntityRelationshipDiagram1" order-index="1" expanded="true" uid="" name-style="" auto-routed-paths="false" default-line-style="default" namespace="dbo" view-location="-627,-471" zoom="0.3">
+      <diagram type="entity-relationship" id="pd0affd59593a4211ac14346809202b4c_801066806" name="EntityRelationshipDiagram1" order-index="1" expanded="true" uid="" name-style="" auto-routed-paths="false" default-line-style="default" namespace="dbo" view-location="-1499,-1438" zoom="0.5">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -591,6 +600,16 @@
               </attribute-pairs>
             </erd-relation>
           </item>
+          <item id="ffe748c518f44178a676ee286c36abfa" cid="ENT037" type="erd-entity" name="CompanyHoliday" creator="CDoZfQE0eoPT0twKUywpA8vD85JtXngqnggardsEAvp/k9B0" creation-date="03/25/2025 14:49:52">
+            <entity description="" />
+            <attributes>
+              <attribute uid="abaf8191c9f5343098622045337ea48a5513" cid="ELEM127" name="ID" type="Integer" type-id="Uml.Integer" primary-key="true" nullable="false" creation-date="03/25/2025 14:50:12" />
+              <attribute uid="a3bcecdd03e014f9c82ab5be2f622982c231" cid="ELEM128" name="CompanyId" type="Integer" type-id="Uml.Integer" foreign-key="true" nullable="false" creation-date="03/25/2025 14:50:25" />
+              <attribute uid="ad23a1c65ad5e403586f2f5e4d288d056215" cid="ELEM129" name="HolidayDate" type="Date" type-id="Date" nullable="false" creation-date="03/25/2025 14:51:05" />
+              <attribute uid="a3469e7a880704b47af47bf38affe319c321" cid="ELEM130" name="Description" type="nvarchar" type-id="nvarchar" type-size="255" nullable="false" creation-date="03/25/2025 14:51:19" />
+            </attributes>
+            <indexes />
+          </item>
           <item id="7a82ed6be3ac45e59f7bdfecc39f79c2" cid="ENT038" type="erd-entity" name="EmployeeAbsence" creator="CDoZfQE0eoPT0twKUywpA8vD85JtXngqnggardsEAvp/k9B0" creation-date="03/25/2025 14:54:25">
             <entity description="" />
             <attributes>
@@ -600,16 +619,6 @@
               <attribute uid="a01b1aedd347747bbaadf75e2a0e6a0ef961" cid="ELEM134" name="EndDateTime" type="DateTime" type-id="Uml.DateTime" nullable="false" creation-date="03/25/2025 14:55:39" />
               <attribute uid="af4c2a7159a5d4ee19f15cf18ebe72229266" cid="ELEM135" name="AbsenceTypeId" type="Integer" type-id="Uml.Integer" foreign-key="true" nullable="false" creation-date="03/25/2025 14:55:50" />
               <attribute uid="add0d92b2a2df4d9c913a33e32df3af4f704" cid="ELEM136" name="Note" type="nvarchar" type-id="nvarchar" type-size="255" nullable="false" creation-date="03/25/2025 14:56:12" />
-            </attributes>
-            <indexes />
-          </item>
-          <item id="ffe748c518f44178a676ee286c36abfa" cid="ENT037" type="erd-entity" name="CompanyHoliday" creator="CDoZfQE0eoPT0twKUywpA8vD85JtXngqnggardsEAvp/k9B0" creation-date="03/25/2025 14:49:52">
-            <entity description="" />
-            <attributes>
-              <attribute uid="abaf8191c9f5343098622045337ea48a5513" cid="ELEM127" name="ID" type="Integer" type-id="Uml.Integer" primary-key="true" nullable="false" creation-date="03/25/2025 14:50:12" />
-              <attribute uid="a3bcecdd03e014f9c82ab5be2f622982c231" cid="ELEM128" name="CompanyId" type="Integer" type-id="Uml.Integer" foreign-key="true" nullable="false" creation-date="03/25/2025 14:50:25" />
-              <attribute uid="ad23a1c65ad5e403586f2f5e4d288d056215" cid="ELEM129" name="HolidayDate" type="Date" type-id="Date" nullable="false" creation-date="03/25/2025 14:51:05" />
-              <attribute uid="a3469e7a880704b47af47bf38affe319c321" cid="ELEM130" name="Description" type="nvarchar" type-id="nvarchar" type-size="255" nullable="false" creation-date="03/25/2025 14:51:19" />
             </attributes>
             <indexes />
           </item>
@@ -733,17 +742,17 @@
             </attributes>
             <indexes />
           </item>
-          <item id="0f60d0e1f37946f19d45ab22659abaf2" cid="REL025" type="erd-relationship" creator="CDoZfQE0eoPT0twKUywpA8vD85JtXngqnggardsEAvp/k9B0" creation-date="03/25/2025 12:53:06" from="bdc6fe3e1f954ae7a497fb599f5e2f31" to="di0b4da0cb8e654caaa365020856a76fa77539">
-            <erd-relation type="Identifying" multiplicity-from="1" multiplicity-to="1">
-              <attribute-pairs>
-                <attribute-pair from-attribute="acc56548cb2174d9db5aaf9a1e46a0112228" to-attribute="a37cedd77cdf54b62abe90658cf24624f649" />
-              </attribute-pairs>
-            </erd-relation>
-          </item>
           <item id="ce2411e6927242dcac93643e7e4ed592" cid="REL021" type="erd-relationship" creator="CDoZfQE0eoPT0twKUywpA8vD85JtXngqnggardsEAvp/k9B0" creation-date="03/25/2025 12:40:32" from="24da9632f0a5468b9f3ad7de5458bdbd" to="cd46f8a599b7412d857955def09b984f">
             <erd-relation type="Identifying" multiplicity-from="*" multiplicity-to="*">
               <attribute-pairs>
                 <attribute-pair from-attribute="aeab3a14bb7844a92b8ea716e4928692e341" to-attribute="a280493afed8c42358ace9ef0b4e94747599" />
+              </attribute-pairs>
+            </erd-relation>
+          </item>
+          <item id="0f60d0e1f37946f19d45ab22659abaf2" cid="REL025" type="erd-relationship" creator="CDoZfQE0eoPT0twKUywpA8vD85JtXngqnggardsEAvp/k9B0" creation-date="03/25/2025 12:53:06" from="bdc6fe3e1f954ae7a497fb599f5e2f31" to="di0b4da0cb8e654caaa365020856a76fa77539">
+            <erd-relation type="Identifying" multiplicity-from="1" multiplicity-to="1">
+              <attribute-pairs>
+                <attribute-pair from-attribute="acc56548cb2174d9db5aaf9a1e46a0112228" to-attribute="a37cedd77cdf54b62abe90658cf24624f649" />
               </attribute-pairs>
             </erd-relation>
           </item>
@@ -861,14 +870,14 @@
             <relation from="di191b4f7b971b445f8548e11f27e4f80b1804" from-iid="5b767c0f99df4899add29ad2290d68fb" from-field="a841924ce16d54c3e89c7791e1181bbe271" to="di0b4da0cb8e654caaa365020856a76fa77539" to-iid="303a9328e84641fba620d3cb4b906c7b" to-field="a37cedd77cdf54b62abe90658cf24624f649" />
           </item>
           <item id="370520d96f9e464fa2ede70762d47941" iid="ca9cd9364e1e4da6946004d38f912d43" creation-date="03/24/2025 14:25:38" order-index="20" type="entity">
-            <layout ax="966" ay="66" awidth="263" aheight="160" x="966" y="66" width="140" height="160" />
+            <layout ax="1056" ay="105" awidth="263" aheight="160" x="1056" y="105" width="140" height="160" />
             <erd-entity show-nullability="true" />
           </item>
           <item id="1dce598851ad4de6a0f3b4b215c1d68b" iid="65df82550cf64cb0b9d4ceb99cdec63e" creation-date="03/24/2025 14:27:52" order-index="22" type="relation">
-            <layout start-role-position="25,15" end-role-position="25,-15" line-style="oblique" start-auto-side="false" lock-end-point="true" lock-to-fields="false" auto-path="" x1="868" y1="102" x2="966" y2="120" start-border-pos="0.434515916384183" end-border-pos="0.915625005960464" start-local-pos="142" end-local-pos="54" name-position="-68,-45">
+            <layout start-role-position="25,15" end-role-position="25,-15" line-style="oblique" start-auto-side="false" lock-end-point="true" lock-to-fields="false" auto-path="" x1="868" y1="112" x2="1056" y2="159" start-border-pos="0.457230934729943" end-border-pos="0.915625005960464" start-local-pos="142" end-local-pos="54" name-position="18,-59">
               <points>
-                <point x="868" y="102" />
-                <point x="966" y="120" />
+                <point x="868" y="112" />
+                <point x="1056" y="159" />
               </points>
             </layout>
             <relation from="di191b4f7b971b445f8548e11f27e4f80b1804" from-iid="5b767c0f99df4899add29ad2290d68fb" from-field="a841924ce16d54c3e89c7791e1181bbe271" to="370520d96f9e464fa2ede70762d47941" to-iid="ca9cd9364e1e4da6946004d38f912d43" to-field="a0db5a57408994ba7aba5162ebf02c4ba646" />
@@ -1147,7 +1156,7 @@
             <erd-entity show-nullability="true" />
           </item>
           <item id="8a820ca141f3403a9352878006e20665" iid="871cafa32f3c4e3f925627760fc5d025" creation-date="03/25/2025 14:57:06" order-index="67" type="relation">
-            <layout start-role-position="25,15" end-role-position="25,-15" line-style="oblique" lock-to-fields="true" auto-path="" x1="930" y1="-918" x2="978" y2="-1226" start-border-pos="0.395479125976563" end-border-pos="0.881067961165048" start-local-pos="116.8833" end-local-pos="41" name-position="0,20">
+            <layout start-role-position="25,15" end-role-position="25,-15" line-style="oblique" lock-to-fields="true" auto-path="" x1="930" y1="-918" x2="978" y2="-1226" start-border-pos="0.395478820800781" end-border-pos="0.881067961165048" start-local-pos="116.8831" end-local-pos="49" name-position="0,20">
               <points>
                 <point x="930" y="-918" />
                 <point x="978" y="-1226" />
