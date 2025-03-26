@@ -67,8 +67,8 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Common\" />
-	  <Folder Include="Models\Customer\" />
 	  <Folder Include="Models\Admin\" />
+	  <Folder Include="Models\Customer\" />
 	  <Folder Include="Models\SalonEmployee\" />
 	  <Folder Include="Services\Database\" />
 	  <Folder Include="Services\Authentication\" />
